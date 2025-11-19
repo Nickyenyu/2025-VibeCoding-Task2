@@ -181,7 +181,7 @@ a:hover{text-decoration:underline}
   display:flex; 
   flex-direction: column; 
   gap:1.5rem; 
-  align-items: flex-start; /* 左側對齊 */
+  align-items: flex-start; /* 👈 修正：確保內容靠左對齊 (flex-start) */
 }
 
 /* 圖片容器 */
@@ -206,7 +206,7 @@ a:hover{text-decoration:underline}
   .about-grid{
     flex-direction: row; /* 在較大螢幕上並排 */
     align-items: flex-start; /* 頂部對齊 */
-    gap:2.5rem; /* 並排時的間距，回到最初的舒適值 */
+    gap:2.5rem; /* 並排時的間距 */
   }
   .about-figure{
     /* 讓圖片佔據 40% 的空間，並讓圖片本身可以彈性縮放 */
@@ -876,7 +876,7 @@ a:hover{text-decoration:underline}
                 </div>
                 <div class="contact-item">
                     <span style="color:var(--accent);font-weight:700;">🔗 LinkedIn：</span> 
-                    <a href="https://www.linkedin.com/in/nickshieh-1aab141a6" target="_blank" rel="noopener" class="contact-link">Nick Hsieh</a>
+                    <a href="https://www.linkedin.com/in/nickshieh-1aab141a6" target="_blank" rel="noopener" class="contact-link">點擊前往 謝硯宇LinkedIn 頁面</a>
                 </div>
             </div>
 
