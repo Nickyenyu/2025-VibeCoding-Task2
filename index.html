@@ -10,8 +10,11 @@
 
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%}
-html {
-  overflow-x: hidden; /* 確保網頁的根元素不會有水平捲動 */
+
+html, body {
+  overflow-x: hidden; /* 確保網頁根元素和主體都禁止水平捲動 */
+  margin: 0; /* 確保沒有瀏覽器預設的 margin */
+  padding: 0; /* 確保沒有瀏覽器預設的 padding */
 }
 body{
   margin:0;
@@ -125,7 +128,7 @@ a:hover{text-decoration:underline}
   display:flex;
   flex-direction:column;
   gap:1.2rem;
-  align-items:flex-start; /* 確保 Hero 內容靠左 */
+  align-items:flex-start; 
 }
 
 .hero-inner{
@@ -150,20 +153,23 @@ a:hover{text-decoration:underline}
 }
 
 .hero-visual{
-  margin-top:1rem;
-  width:100%; /* 讓容器佔滿可用空間 */
-  border-radius:10px;
+  /* 關鍵修正：將圖片的左右 margin 設為負值，抵銷父容器的 padding */
+  margin: 0 -1rem 1rem -1rem; 
+  /* 關鍵修正：讓寬度擴展到包含被抵銷的 padding */
+  width: calc(100% + 2rem); 
+  
+  border-radius:0; /* 移除容器的圓角 */
   overflow:hidden;
   box-shadow:0 8px 30px rgba(2,6,23,0.6);
-  margin: 0; /* 👈 移除所有 margin，避免置中 */
 }
 
 /* 確保 Hero 區塊的圖片也始終在容器內 */
 .hero-visual img {
-    max-width: 100%; /* 強制圖片不超出父容器 */
+    max-width: 100%; 
     height: auto;
-    display: block; /* 確保圖片是塊級元素，行為可預期 */
-    margin: 0; /* 👈 確保圖片本身沒有 margin 導致置中 */
+    display: block; 
+    margin: 0; 
+    border-radius:10px; /* 將圓角還給圖片，避免切邊 */
 }
 
 /* 一個簡單的 meta 行，顯示職稱與 CTA */
