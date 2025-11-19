@@ -125,7 +125,7 @@ a:hover{text-decoration:underline}
   display:flex;
   flex-direction:column;
   gap:1.2rem;
-  align-items:flex-start;
+  align-items:flex-start; /* 確保 Hero 內容靠左 */
 }
 
 .hero-inner{
@@ -133,7 +133,7 @@ a:hover{text-decoration:underline}
   flex-direction:column;
   gap:1rem;
   width:100%;
-  align-items:flex-start;
+  align-items:flex-start; /* 確保 Hero 內部內容靠左 */
 }
 
 .hero-title{
@@ -151,19 +151,19 @@ a:hover{text-decoration:underline}
 
 .hero-visual{
   margin-top:1rem;
-  width:100%;
+  width:100%; /* 讓容器佔滿可用空間 */
   border-radius:10px;
   overflow:hidden;
   box-shadow:0 8px 30px rgba(2,6,23,0.6);
-  /* 👈 關鍵修正：確保圖片不會讓頁面溢出 */
-  max-width: 100%; 
+  margin: 0; /* 👈 移除所有 margin，避免置中 */
 }
 
 /* 確保 Hero 區塊的圖片也始終在容器內 */
 .hero-visual img {
-    max-width: 100%;
+    max-width: 100%; /* 強制圖片不超出父容器 */
     height: auto;
-    display: block;
+    display: block; /* 確保圖片是塊級元素，行為可預期 */
+    margin: 0; /* 👈 確保圖片本身沒有 margin 導致置中 */
 }
 
 /* 一個簡單的 meta 行，顯示職稱與 CTA */
@@ -544,7 +544,7 @@ a:hover{text-decoration:underline}
         </div>
 
         <figure class="hero-visual" aria-hidden="false">
-          <img src="Yenyu2.png" alt="謝硯宇個人照 - 公關、媒體與影音圖文整合" loading="lazy" style="width:100%;height:auto;"/>
+          <img src="Yenyu3.png" alt="謝硯宇個人照 - 公關、媒體與影音圖文整合" loading="lazy" style="width:100%;height:auto;"/>
         </figure>
       </div>
     </div>
