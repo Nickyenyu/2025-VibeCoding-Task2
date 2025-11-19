@@ -187,19 +187,19 @@ a:hover{text-decoration:underline}
 /* 圖片容器 */
 .about-figure{
   width:100%; /* 小螢幕佔滿 */
-  max-width: 500px; /* 避免小螢幕圖片無限放大 */
   
   /* 👈 關鍵修正：確保圖片容器本身和內部內容靠左 */
   margin: 0; /* 移除 figure 預設的 margin，避免置中 */
   text-align: left; /* 確保圖片容器內的圖片靠左 */
-  /* 結束關鍵修正 */
+  /* 移除 max-width: 500px 確保不影響 RWD 佈局 */
   
   margin-bottom:0; 
 }
 
 .about-figure img {
-    width: 100%;
-    /* 圖片設定為 block 確保 text-align 生效 */
+    /* 確保圖片寬度不會超出其父容器 */
+    max-width: 100%; 
+    height: auto;
     display: block; 
 }
 
@@ -218,8 +218,8 @@ a:hover{text-decoration:underline}
   .about-figure{
     flex-basis: 40%; 
     flex-shrink: 0; 
-    max-width: 400px; 
-    margin: 0; /* 保持 margin 為 0 */
+    max-width: 400px; /* 大螢幕下可以維持這個最大寬度 */
+    margin: 0; 
   }
   
   /* 讓文字內容自然地佔據剩餘的 60% 空間 */
