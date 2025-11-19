@@ -181,19 +181,26 @@ a:hover{text-decoration:underline}
   display:flex; 
   flex-direction: column; 
   gap:1.5rem; 
-  align-items: flex-start; /* 👈 修正：確保內容靠左對齊 (flex-start) */
+  align-items: flex-start; /* 確保內容區塊靠左對齊 */
 }
 
 /* 圖片容器 */
 .about-figure{
   width:100%; /* 小螢幕佔滿 */
   max-width: 500px; /* 避免小螢幕圖片無限放大 */
+  
+  /* 👈 關鍵修正：確保圖片容器本身和內部內容靠左 */
+  margin: 0; /* 移除 figure 預設的 margin，避免置中 */
+  text-align: left; /* 確保圖片容器內的圖片靠左 */
+  /* 結束關鍵修正 */
+  
   margin-bottom:0; 
 }
 
 .about-figure img {
-    /* 確保圖片在容器內正常縮放 */
     width: 100%;
+    /* 圖片設定為 block 確保 text-align 生效 */
+    display: block; 
 }
 
 .about-bio{
@@ -209,10 +216,10 @@ a:hover{text-decoration:underline}
     gap:2.5rem; /* 並排時的間距 */
   }
   .about-figure{
-    /* 讓圖片佔據 40% 的空間，並讓圖片本身可以彈性縮放 */
-    flex-basis: 40%; /* 設置起始寬度 */
-    flex-shrink: 0; /* 不壓縮 */
-    max-width: 400px; /* 再次限制圖片最大尺寸 */
+    flex-basis: 40%; 
+    flex-shrink: 0; 
+    max-width: 400px; 
+    margin: 0; /* 保持 margin 為 0 */
   }
   
   /* 讓文字內容自然地佔據剩餘的 60% 空間 */
