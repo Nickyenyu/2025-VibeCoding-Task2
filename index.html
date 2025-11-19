@@ -155,6 +155,15 @@ a:hover{text-decoration:underline}
   border-radius:10px;
   overflow:hidden;
   box-shadow:0 8px 30px rgba(2,6,23,0.6);
+  /* 👈 關鍵修正：確保圖片不會讓頁面溢出 */
+  max-width: 100%; 
+}
+
+/* 確保 Hero 區塊的圖片也始終在容器內 */
+.hero-visual img {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* 一個簡單的 meta 行，顯示職稱與 CTA */
