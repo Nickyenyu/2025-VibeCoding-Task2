@@ -69,12 +69,12 @@ a:hover{text-decoration:underline}
 /* 小提醒文字區 */
 .placeholder-note{
   margin-top:0.5rem;
-  color:var(--muted);
+  color:var(--accent); /* 讓提醒文字使用主色 */
   font-size:0.95rem;
   background:rgba(255,255,255,0.01);
   padding:0.6rem;
   border-radius:6px;
-  border:1px solid rgba(255,255,255,0.02);
+  border:1px solid rgba(14,165,164,0.3); /* 讓邊框顏色更突出 */
 }
 /* CSS:BASE-END */
 
@@ -177,13 +177,23 @@ a:hover{text-decoration:underline}
 }
 
 .about-grid{
-  display:block;
-  gap:1rem;
+  /* 預設小螢幕：垂直堆疊 */
+  display:flex; 
+  flex-direction: column; 
+  gap:1.5rem; 
+  align-items: flex-start; /* 左側對齊 */
 }
 
+/* 圖片容器 */
 .about-figure{
-  width:100%;
-  margin-bottom:0.6rem;
+  width:100%; /* 小螢幕佔滿 */
+  max-width: 500px; /* 避免小螢幕圖片無限放大 */
+  margin-bottom:0; 
+}
+
+.about-figure img {
+    /* 確保圖片在容器內正常縮放 */
+    width: 100%;
 }
 
 .about-bio{
@@ -191,6 +201,26 @@ a:hover{text-decoration:underline}
   margin:0;
 }
 
+/* RWD 調整 for about section */
+@media (min-width: 48rem){ /* 768px */
+  .about-grid{
+    flex-direction: row; /* 在較大螢幕上並排 */
+    align-items: flex-start; /* 頂部對齊 */
+    gap:2.5rem; /* 並排時的間距，回到最初的舒適值 */
+  }
+  .about-figure{
+    /* 讓圖片佔據 40% 的空間，並讓圖片本身可以彈性縮放 */
+    flex-basis: 40%; /* 設置起始寬度 */
+    flex-shrink: 0; /* 不壓縮 */
+    max-width: 400px; /* 再次限制圖片最大尺寸 */
+  }
+  
+  /* 讓文字內容自然地佔據剩餘的 60% 空間 */
+  .about-grid > div {
+    flex-basis: 60%;
+    flex-shrink: 1;
+  }
+}
 /* CSS:ABOUT-END */
 
 /* CSS:SKILLS-START */
@@ -198,20 +228,72 @@ a:hover{text-decoration:underline}
   margin-top:1rem;
 }
 
+.skill-group-container{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:1.5rem; 
+}
+
+.skill-group{
+  background:var(--surface);
+  padding:1rem;
+  border-radius:8px;
+  /* 強化邊界：讓分組框更明顯 */
+  border:1px solid rgba(255,255,255,0.1); 
+}
+
+.skill-category-title{
+  margin:0 0 0.8rem 0;
+  font-size:1rem;
+  font-weight:700;
+  color:var(--text);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  padding-bottom:0.5rem;
+}
+
 .skill-list{
   display:flex;
-  gap:0.5rem;
+  gap:0.6rem;
   flex-wrap:wrap;
 }
 
+/* 技能標籤基本樣式 (統一風格) */
 .skill-pill{
-  padding:0.35rem 0.6rem;
+  padding:0.4rem 0.7rem;
   border-radius:999px;
-  background:rgba(255,255,255,0.02);
-  color:var(--muted);
+  background:rgba(255,255,255,0.05); /* 統一使用深底色 */
+  color:var(--text); /* 統一使用白色文字 */
   font-size:0.9rem;
+  font-weight:500;
+  white-space:nowrap;
+  /* 統一給予一個明顯的白色邊框 */
+  border:1px solid rgba(255,255,255,0.25); 
 }
 
+/* 移除 is-expert 類別的特殊樣式，讓它回歸基本風格 */
+.skill-pill.is-expert{
+  /* 讓 is-expert 繼承 .skill-pill 的樣式，維持一致性 */
+  background:rgba(255,255,255,0.05);
+  color:var(--text);
+  border-color:rgba(255,255,255,0.25);
+  box-shadow:none; 
+  font-weight:500; /* 不再特別加粗 */
+}
+
+/* 移除 is-beginner 類別的特殊樣式，讓它回歸基本風格 */
+.skill-pill.is-beginner{
+  /* 讓 is-beginner 繼承 .skill-pill 的樣式，維持一致性 */
+  background:rgba(255,255,255,0.05);
+  color:var(--text);
+  border-color:rgba(255,255,255,0.25);
+}
+
+/* RWD 調整 */
+@media (min-width: 48rem){ /* 768px */
+  .skill-group-container{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
 /* CSS:SKILLS-END */
 
 /* CSS:PROJECTS-START */
@@ -219,29 +301,84 @@ a:hover{text-decoration:underline}
   margin-top:1rem;
 }
 
+/* 篩選器樣式 */
+.project-filters{
+  display:flex;
+  gap:0.5rem;
+  margin-bottom:1.25rem;
+  flex-wrap:wrap;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  padding-bottom:0.6rem;
+}
+
+.filter-btn{
+  background:transparent;
+  border:1px solid var(--muted);
+  color:var(--muted);
+  padding:0.4rem 0.8rem;
+  border-radius:999px;
+  font-size:0.9rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s ease;
+}
+
+.filter-btn:hover:not(.is-active){
+  background:rgba(255,255,255,0.05);
+  color:var(--text);
+}
+
+.filter-btn.is-active{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:var(--bg); /* 讓文字顏色與深色背景一致 */
+}
+
+/* 作品網格 */
 .projects-grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:1rem;
+  gap:1.2rem;
 }
 
 .project-card{
   background:var(--surface);
-  padding:0.9rem;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,0.02);
+  padding:1.2rem;
+  border-radius:10px;
+  border:2px solid transparent; /* 預設透明邊框 */
+  transition:all 0.3s ease;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* 強調 Hover 效果：讓框線明顯 */
+.project-card:hover{
+  border-color:var(--accent);
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(14,165,164,0.2); /* 讓邊框發出主色光暈 */
 }
 
 .project-title{
-  margin:0 0 0.4rem 0;
-  font-size:1rem;
+  margin:0 0 0.5rem 0;
+  font-size:1.05rem;
   color:var(--text);
 }
 
 .project-desc{
-  margin:0;color:var(--muted);font-size:0.95rem;
+  margin:0 0 1rem 0;
+  color:var(--muted);
+  font-size:0.95rem;
 }
 
+.project-card .btn{
+  font-size:0.9rem;
+}
+
+/* RWD 調整 */
+@media (min-width: 48rem){ /* 768px */
+  .projects-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
 /* CSS:PROJECTS-END */
 
 /* CSS:CONTACT-START */
@@ -250,22 +387,95 @@ a:hover{text-decoration:underline}
   padding-bottom:2.5rem;
 }
 
-.contact-list{
+.contact-sub{
+  color:var(--muted);
+  margin-bottom:1.5rem;
+  max-width:60ch;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:2rem;
+}
+
+/* 聯絡資訊列表樣式 */
+.contact-info{
   display:flex;
   flex-direction:column;
-  gap:0.5rem;
+  gap:1rem;
+  padding:1rem 0;
+  border-left:2px solid var(--surface);
+  padding-left:1rem;
 }
 
 .contact-item{
+  font-size:1rem;
+  color:var(--text);
   display:flex;
-  gap:0.6rem;
-  align-items:center;
-  color:var(--muted);
-  font-size:0.95rem;
+  flex-wrap:wrap;
+  gap:0.25rem;
 }
 
-.contact-item a{color:var(--accent);font-weight:600}
+.contact-link{
+  color:var(--accent);
+  font-weight:500;
+}
 
+/* 聯絡表單樣式 */
+.contact-form{
+  background:var(--surface);
+  padding:1.5rem;
+  border-radius:10px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+.form-group{
+  margin-bottom:1rem;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea{
+  width:100%;
+  padding:0.75rem;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:6px;
+  background:var(--bg); /* 使用比 surface 更深的背景色 */
+  color:var(--text);
+  font-size:1rem;
+  transition:border-color 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus{
+  outline:none;
+  border-color:var(--accent);
+}
+
+.contact-form textarea{
+  resize:vertical;
+}
+
+.contact-submit-btn{
+  width:100%;
+  text-align:center;
+  cursor:pointer;
+  margin-top:0.5rem;
+}
+
+.form-note{
+  color:var(--muted);
+  font-size:0.85rem;
+  margin-top:1rem;
+}
+
+/* RWD 調整 */
+@media (min-width: 48rem){ /* 768px */
+  .contact-grid{
+    grid-template-columns:1fr 1.5fr;
+  }
+}
 /* CSS:CONTACT-END */
 
 /* CSS:RWD-START */
@@ -281,11 +491,22 @@ a:hover{text-decoration:underline}
   .hero-title{font-size:2.4rem}
 }
 /* CSS:RWD-END */
-</style> </head> <body> <div class="page"> <header class="site-header"> <div class="container nav" role="navigation" aria-label="主導覽列"> <div class="brand">Your Name · Frontend Dev</div> <nav class="nav-list" aria-label="主要導覽"> <a class="nav-link" href="#hero">首頁</a> <a class="nav-link" href="#about">關於我</a> <a class="nav-link" href="#skills">技能</a> <a class="nav-link" href="#projects">作品集</a> <a class="nav-link" href="#contact">聯絡我</a> </nav>
-</div> 
+</style>
+</head> 
+<body> 
+  <div class="page"> 
+<header class="site-header"> 
+  <div class="container nav" role="navigation" aria-label="主導覽列"> 
+    <div class="brand">謝硯宇 · 策略公關/媒體溝通</div> 
+    <nav class="nav-list" aria-label="主要導覽"> 
+      <a class="nav-link" href="#hero">首頁</a> 
+      <a class="nav-link" href="#about">關於我</a> 
+      <a class="nav-link" href="#skills">技能</a> 
+      <a class="nav-link" href="#projects">作品集</a> 
+      <a class="nav-link" href="#contact">聯絡洽詢</a> </nav>
+  </div> 
 </header>
 <main>
-  <!-- SECTION:HERO-START -->
   <section id="hero" class="section section-hero" aria-labelledby="hero-heading">
     <div class="container hero">
       <div class="hero-inner">
@@ -301,7 +522,7 @@ a:hover{text-decoration:underline}
             <a class="btn" href="Resume-Hsieh.pdf" download>下載履歷</a>
           </div>
 
-          <p class="placeholder-note" style="color:var(--accent);">
+          <p class="placeholder-note">
             結合公關、新聞與設計實務，擅長多媒體內容整合，為複雜議題提供最精準的解決方案。
           </p>
         </div>
@@ -312,115 +533,420 @@ a:hover{text-decoration:underline}
       </div>
     </div>
   </section>
-  <!-- SECTION:HERO-END -->
-
-  <!-- SECTION:ABOUT-START -->
-  <section id="about" class="section section-about" aria-labelledby="about-heading">
+<section id="about" class="section section-about" aria-labelledby="about-heading">
     <div class="container">
       <h2 id="about-heading" class="section-title">我的跨界經歷與核心價值</h2>
       <div class="about-grid">
         <figure class="about-figure">
-          <img src="https://source.unsplash.com/800x600/?programmer,desk" alt="謝硯宇在辦公桌前，呈現複合專業背景" loading="lazy" />
+          <img src="IMG_1407.JPG" alt="謝硯宇在講台上演講，呈現專業背景" loading="lazy" style="border-radius:6px;box-shadow:0 4px 15px rgba(0,0,0,0.3);"/>
         </figure>
-        <div>
-          <p class="about-bio">
+        
+        <div> <p class="about-bio">
             我的專業優勢，源於政治幕僚的策略端，延伸至新聞媒體的採訪端。獨特的跨界視角讓我具備預判輿情、洞察議題的雙重能力。我擅長將複雜資訊轉化為具備高傳播力的多媒體內容，並以策略性的內容統籌，提供從新聞稿撰寫、媒體關係經營到影音圖文編修的所有環節，確保每一次溝通都能精準有效。
           </p>
-          <p class="placeholder-note">開發者提醒：之後會用 Section SDD 的 Prompt 產生新的 section，請把新的 section 程式碼整段貼在這兩個註解中間，完全取代現在這一區。</p>
+          
+          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.03);">
+              <p style="color:var(--accent);font-weight:600;font-size:0.95rem;margin:0;">
+                  > 核心理念：以策略思維主導內容產出，強化溝通效益。
+              </p>
+          </div>
         </div>
       </div>
     </div>
-  </section>
-  <!-- SECTION:ABOUT-END -->
-
-  <!-- SECTION:SKILLS-START -->
-  <section id="skills" class="section section-skills" aria-labelledby="skills-heading">
+</section>
+ <section id="skills" class="section section-skills" aria-labelledby="skills-heading">
     <div class="container">
       <h2 id="skills-heading" class="section-title">我的跨域核心技能圖譜</h2>
-      <p class="placeholder-note">這裡目前是 Skills 區的占位內容，會列出技術分類（前端、工具、測試、部署等）與熟練度。之後會用 Section SDD 產生新的 section，請把新的 section 程式碼整段貼回來，完全取代這一區。</p>
 
-      <div class="skill-list" aria-hidden="true">
-       <span class="skill-pill is-category">策略公關與議題管理</span>
-        <span class="skill-pill">危機處理</span>
-        <span class="skill-pill">政策倡議</span>
-        <span class="skill-pill">媒體關係建立</span>
-        <span class="skill-pill">議題追蹤與分析</span>
+      <div class="skill-group-container">
+        
+        <div class="skill-group">
+          <h3 class="skill-category-title">策略公關與議題管理</h3>
+          <div class="skill-list">
+            <span class="skill-pill">危機處理</span>
+            <span class="skill-pill">政策倡議</span>
+            <span class="skill-pill">媒體關係建立</span>
+            <span class="skill-pill">議題追蹤與分析</span>
+          </div>
+        </div>
 
-        <span class="skill-pill is-category">媒體內容統籌與產製</span>
-        <span class="skill-pill">新聞稿撰寫</span>
-        <span class="skill-pill">深度採訪與編輯</span>
-        <span class="skill-pill">媒體發言與溝通</span>
-        <span class="skill-pill">社群媒體管理</span>
+        <div class="skill-group">
+          <h3 class="skill-category-title">媒體內容統籌與產製</h3>
+          <div class="skill-list">
+            <span class="skill-pill">新聞稿撰寫</span>
+            <span class="skill-pill">深度採訪與編輯</span>
+            <span class="skill-pill">媒體發言與溝通</span>
+            <span class="skill-pill">社群媒體管理</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3 class="skill-category-title">影音圖文視覺整合</h3>
+          <div class="skill-list">
+            <span class="skill-pill is-expert">Adobe Premiere (中等)</span>
+            <span class="skill-pill is-expert">Adobe Illustrator (中等)</span>
+            <span class="skill-pill is-beginner">Adobe Photoshop (中等)</span>
+            <span class="skill-pill is-beginner">數據視覺化 (Tableau, 基礎)</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3 class="skill-category-title">跨文化溝通能力</h3>
+          <div class="skill-list">
+            <span class="skill-pill is-expert">台語 (熟練)</span>
+            <span class="skill-pill is-expert">客語 (熟練)</span>
+            <span class="skill-pill">日語 (日常溝通)</span>
+            <span class="skill-pill is-beginner">英語 (基礎資訊)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="projects" class="section section-projects" aria-labelledby="projects-heading">
+    <div class="container">
+      <h2 id="projects-heading" class="section-title">實戰成果：策略、內容與傳播整合案例</h2>
       
-        <span class="skill-pill is-category">影音圖文視覺整合</span>
-        <span class="skill-pill">Adobe Premiere (熟練)</span>
-        <span class="skill-pill">Adobe Illustrator (熟練)</span>
-        <span class="skill-pill">Adobe Photoshop (基礎)</span>
-        <span class="skill-pill">數據視覺化 (Tableau, 基礎)</span>
-
-        <span class="skill-pill is-category">跨文化溝通能力</span>
-        <span class="skill-pill">英語 (基礎資訊獲取)</span>
-        <span class="skill-pill">日語 (日常溝通)</span>
-        <span class="skill-pill">台語 (熟練)</span>
-        <span class="skill-pill">客語 (熟練)</span>
+      <div class="project-filters" role="tablist" aria-label="專案分類篩選">
+        <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true" id="filter-all">
+          所有案例 (6)
+        </button>
+        <button class="filter-btn" data-filter="strategy" role="tab" aria-selected="false" id="filter-strategy">
+          公關策略 (2)
+        </button>
+        <button class="filter-btn" data-filter="media" role="tab" aria-selected="false" id="filter-media">
+          媒體新聞 (2)
+        </button>
+        <button class="filter-btn" data-filter="design" role="tab" aria-selected="false" id="filter-design">
+          影音設計 (2)
+        </button>
       </div>
-    </div>
-  </section>
-  <!-- SECTION:SKILLS-END -->
 
-  <!-- SECTION:PROJECTS-START -->
-  <section id="projects" class="section section-projects" aria-labelledby="projects-heading">
-    <div class="container">
-      <h2 id="projects-heading" class="section-title">作品集（之後會用 Section SDD 替換）</h2>
-      <p class="placeholder-note">這裡目前是 Projects 區的占位內容，會以卡片形式展示專案縮圖、名稱、技術與連結。之後會用 Section SDD 產生新的 section，請把新的 section 程式碼整段貼回來，完全取代這一區。</p>
-
-      <div class="projects-grid" aria-hidden="true">
-        <article class="project-card">
-          <h3 class="project-title">範例專案 A</h3>
-          <p class="project-desc">短描述：展示 RWD 與語意化 HTML 的實作。</p>
+      <div class="projects-grid">
+        
+        <article class="project-card" data-category="strategy">
+            <h3 class="project-title">公共政策議題設定與媒體溝通</h3>
+            <p class="project-desc" style="margin-bottom:0.8rem;">彙整多項成功推動立法或政策研議的議題案例。以下為我在國會期間主導並促成媒體報導的五項核心貢獻：</p>
+            
+            <ul style="list-style:none; padding:0; margin:0;">
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.upmedia.mg/tw/investigation/survey/98480" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 菸品修法：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">率先提出新型管制菸品的法案措施，推動菸害防制法修正方向。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.cna.com.tw/news/ahel/201810180159.aspx" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 台鐵安全：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">促成交通部研議，全面增設台鐵各車站及車廂內 AED。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://finance.ettoday.net/news/1041748" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 電動車政策：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">點評政府電動車充電設施建置落差，促使主管機關回應。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://ec.ltn.com.tw/article/paper/1099389" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 電子支付：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">分析台灣 Pay 市場競爭力不足的四點原因，提供趨勢洞察。</span>
+              </li>
+              <li style="font-size:0.95rem;">
+                <a href="https://news.housefun.com.tw/news/article/101636145995.html" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 高鐵南延：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">追蹤雙鐵共構及高鐵南延的區域交通與政治議題。</span>
+              </li>
+            </ul>
         </article>
 
-        <article class="project-card">
-          <h3 class="project-title">範例專案 B</h3>
-          <p class="project-desc">短描述：展示效能優化與無 JS 的互動替代方案。</p>
+        <article class="project-card" data-category="strategy">
+            <h3 class="project-title">國際公關與跨文化溝通任務統籌</h3>
+            <p class="project-desc" style="margin-bottom:0.8rem;">
+              受客戶指定陪同至日本及泰國執行特定任務。成功宣傳「TAIWAN PLUS 2023 台日一緒に」台灣文化祭活動，並負責泰國公關佈局、危機應變、媒體發言與資源整合，展現跨文化溝通與議題執行能力。
+            </p>
+
+            <ul style="list-style:none; padding:0; margin:0;">
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.mirrormedia.mg/story/20230808edi062" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 日本文化祭：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">協助「TAIWAN PLUS 2023 台日一緒に」台灣文化祭的國際媒體宣傳。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://news.ltn.com.tw/news/politics/breakingnews/4400738" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 泰國台商活動：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">協助規劃與執行泰國台商後援會活動，擴大支持者動員與曝光。</span>
+              </li>
+              <li style="font-size:0.95rem;">
+                <a href="https://www.ctwant.com/article/278105/" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 曼谷城市考察：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">協助媒體聯繫與議題設定，報導城市路權改善考察計畫。</span>
+              </li>
+            </ul>
         </article>
-      </div>
-    </div>
-  </section>
-  <!-- SECTION:PROJECTS-END -->
 
-  <!-- SECTION:CONTACT-START -->
-  <section id="contact" class="section section-contact" aria-labelledby="contact-heading">
+        <article class="project-card" data-category="media">
+            <h3 class="project-title">政治專題與體育賽事深度報導</h3>
+            <p class="project-desc" style="margin-bottom:0.8rem;">
+              彙整幕僚與新聞經驗，展現對公共事務、選舉分析及重大體育賽事的專題追蹤與採訪撰稿能力，並包含圖卡製作。擔任記者期間，主跑中華職棒賽事，負責主筆賽前分析、賽事結果，撰寫近千篇新聞。
+            </p>
+
+            <ul style="list-style:none; padding:0; margin:0;">
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.shotnews.tw/news/5232cb6e97fd4" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 體育專欄：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">與名球評共同負責「島嶼好球帶」專欄，深度分析台灣聯隊名稱演變。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.shotnews.tw/news/bf13fac393484" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 國際賽事WBCQ：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">主導WBCQ（世界棒球經典賽資格賽）新聞，負責賽前分析與即時報導。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.shotnews.tw/news/6b12cd0795c74" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 中日職交流報導：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">主導 2025 日本火腿鬥士隊臺灣交流試合新聞，聚焦跨國賽事議題。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.shotnews.tw/news/3e66473107e14" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 施政滿意度分析：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">發布六都施政滿意度調查結果，提供政治局勢的數據化洞察。</span>
+              </li>
+              <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+                <a href="https://www.shotnews.tw/news/e774d6fb4af44" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 執政轉折點深度報導：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">深入解析新政府執政首年，罷免與疑美論對政局的影響與轉折。</span>
+              </li>
+              <li style="font-size:0.95rem;">
+                <a href="https://www.shotnews.tw/news/22733c308d2a4" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                  ▸ 預算爭議追蹤：
+                </a>
+                <span style="font-weight:normal; color:var(--text); text-decoration:none;">追蹤朝野刪凍預算爭議，探討其對駐外館、護照等公共服務的潛在衝擊。</span>
+              </li>
+            </ul>
+        </article>
+
+        <article class="project-card" data-category="media">
+          <h3 class="project-title">生活消費議題與健康醫療報導</h3>
+          <p class="project-desc" style="margin-bottom:0.8rem;">聚焦民生趨勢、餐飲金融及公共衛生領域，展現對消費趨勢、養生健康資訊的精準採訪與內容編輯能力。</p>
+          
+          <ul style="list-style:none; padding:0; margin:0;">
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.shotnews.tw/news/993038a89c7e4" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 台灣美食展：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;">現場報導台灣美食展盛況，提供異國料理及餐飲市場趨勢報導。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.shotnews.tw/news/b027813ea9ba4" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 可愛經濟：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;">深度分析 Z 世代如何透過「可愛經濟」撫慰焦慮，形成新興商機。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.shotnews.tw/news/4c70713342a24" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 聲音平台趨勢：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;">探討 3 倍速聽書成為閱讀趨勢，以及聲音平台如何拓展新媒體版圖。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.shotnews.tw/news/fc818ca2d1214" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 失智症醫療：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;">追蹤失智症人口升高議題，報導新藥與早期篩檢技術的發展進程。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.shotnews.tw/news/4995f8f4ac6b4" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 假投資詐騙：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;">警示假投資詐騙單週吸金 20 億元，曝光前三大常見詐騙手法。</span>
+            </li>
+            <li style="font-size:0.95rem;">
+              <a href="https://www.shotnews.tw/news/7d0f5222950a4" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 青光眼健康：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;">提醒 40 歲以上為青光眼高危險族群，並強調九成初期無症狀。</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="project-card" data-category="design">
+          <h3 class="project-title">長短影音企劃與製作</h3>
+          <p class="project-desc" style="margin-bottom:0.8rem;">
+            統籌影音內容，涵蓋高流量體育短影音、時事短新聞及深度專訪長影片，展現多元內容製作與視覺統籌能力。
+          </p>
+          
+          <ul style="list-style:none; padding:0; margin:0;">
+            <li style="font-size:1rem; margin-bottom:0.6rem; font-weight:700; color:var(--text);">短影音 (Short-Form Content)</li>
+            
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.facebook.com/reel/1875490163279303/?s=fb_shorts_profile&stack_idx=0" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 高流量體育短片：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 鄭宗哲長打威力報導，一週內創下94萬觀看數。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.facebook.com/reel/702790639248160/?s=fb_shorts_profile&stack_idx=0" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 專欄歷史短片：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 郭源治日職明星賽初登板，累積55萬觀看數。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:1rem;">
+              <a href="https://www.youtube.com/shorts/gmbqASHNXTg" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 總統府採訪：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 賴清德總統談中國議題，聚焦重要時事議題傳播。</span>
+            </li>
+
+            <li style="font-size:1rem; margin-bottom:0.6rem; font-weight:700; color:var(--text);">長影音專訪 (Long-Form Interview)</li>
+            
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://youtu.be/QWAZgLuSaf8?si=sZwZHuxGPWVYSIHv" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 前行政院長陳建仁專訪：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 專訪陳建仁對台灣民主變革的看法。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.youtube.com/watch?v=lk2dCQWWL6g" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 僑委會主委徐佳青專訪：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 深入探討台灣吸引力與海歸派激增現象。</span>
+            </li>
+            <li style="font-size:0.95rem;">
+              <a href="https://www.youtube.com/watch?v=CBi-dXcel6U&list=PLnT3k6lJRD2YMkd1d4EKvtqw4OYnd7PkS&index=18" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 生技產業深度專訪：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 專訪台大教授林泰元，探討生技產業發展。</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="project-card" data-category="design">
+          <h3 class="project-title">地方選舉視覺圖文與數據設計</h3>
+          <p class="project-desc" style="margin-bottom:0.8rem;">
+            競選文宣、社群圖文及資訊圖表的視覺設計，展現數據視覺化與快速應變的圖文製作能力。
+          </p>
+          
+          <ul style="list-style:none; padding:0; margin:0;">
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://public.tableau.com/app/profile/.13731063/viz/4_17540743224370/20254" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 互動數據視覺化 (Tableau)：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 運用 Tableau 平台，展示如何將複雜數據轉化為可交互、多樣化的呈現方式。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.facebook.com/iamyungchang/photos/pb.100044563383850.-2207520000/1464628473697271/?type=3" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 競選文宣實務：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 地方選舉倒數圖卡，以「好將來指南」圖文，導引選民投票決策與行動。</span>
+            </li>
+            <li style="font-size:0.95rem; margin-bottom:0.5rem;">
+              <a href="https://www.facebook.com/iamyungchang/photos/pb.100044563383850.-2207520000/1968002543359859/?type=3" target="_blank" style="font-weight:700; color:var(--accent); text-decoration:underline;">
+                ▸ 高流量時事圖卡：
+              </a>
+              <span style="font-weight:normal; color:var(--text); text-decoration:none;"> 奧運羽球賽事時事圖卡，結合關鍵時刻，展現即時設計與高社群互動能力。</span>
+            </li>
+          </ul>
+        </article>
+      </div> 
+    </div>
+</section>
+<section id="contact" class="section section-contact" aria-labelledby="contact-heading">
     <div class="container">
-      <h2 id="contact-heading" class="section-title">聯絡我（之後會用 Section SDD 替換）</h2>
-      <p class="placeholder-note">這裡目前是 Contact 區的占位內容，會放上 Email、電話、GitHub、LinkedIn 與聯絡表單（如需）。之後會用 Section SDD 產生新的 section，請把新的 section 程式碼整段貼回來，完全取代這一區。</p>
+        <h2 id="contact-heading" class="section-title">聯絡資訊與合作洽詢</h2>
+        
+        <p class="contact-sub">
+            歡迎透過以下方式聯繫我，或直接填寫表單，我會在 48 小時內回覆。
+        </p>
 
-      <div class="contact-list">
-        <div class="contact-item">
-          📧 <a href="mailto:hello@example.com">hello@example.com</a>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span style="color:var(--accent);font-weight:700;">📧 Email：</span> 
+                    <a href="mailto:pket67@gmail.com" class="contact-link">pket67@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <span style="color:var(--accent);font-weight:700;">🔗 LinkedIn：</span> 
+                    <a href="https://www.linkedin.com/in/nickshieh-1aab141a6" target="_blank" rel="noopener" class="contact-link">Nick Hsieh</a>
+                </div>
+            </div>
+
+            <form class="contact-form" action="https://formspree.io/f/mldznego" method="POST">
+                <div class="form-group">
+                    <label for="name" class="visually-hidden">姓名</label>
+                    <input type="text" id="name" name="name" placeholder="您的姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="visually-hidden">Email</label>
+                    <input type="email" id="email" name="email" placeholder="您的 Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="visually-hidden">訊息內容</label>
+                    <textarea id="message" name="message" rows="5" placeholder="請留下您的訊息，我會盡快回覆您。" required></textarea>
+                </div>
+                <button type="submit" class="btn contact-submit-btn">送出洽詢訊息</button>
+                <p class="form-note">
+                    我尊重您的隱私，所有提供的資訊僅用於回覆您的洽詢，不會用於其他用途。
+                </p>
+            </form>
         </div>
-        <div class="contact-item">
-          📞 <a href="tel:+886900000000">+886 900 000 000</a>
-        </div>
-        <div class="contact-item">
-          💼 <a href="https://github.com/yourname" target="_blank" rel="noopener">GitHub / yourname</a>
-        </div>
-        <div class="contact-item">
-          🔗 <a href="https://www.linkedin.com/in/yourname" target="_blank" rel="noopener">LinkedIn / yourname</a>
-        </div>
-      </div>
     </div>
-  </section>
-  <!-- SECTION:CONTACT-END -->
+</section>
 </main>
 
 <footer class="site-footer">
   <div class="container" style="padding:1.25rem 0;color:var(--muted);font-size:0.95rem;border-top:1px solid rgba(255,255,255,0.02);margin-top:1rem">
-    <div>© <span aria-hidden="true">Your Name</span> · 前端工程師骨架。以 HTML + CSS 單檔形式建立（Phase 1）。</div>
-    <div style="margin-top:0.4rem">版權與聯絡資訊請更新為您的正式資料。</div>
+    <div>© 謝硯宇 · 專業公關與媒體內容整合。保留所有權利。</div>
+    <div style="margin-top:0.4rem">此作品集網站以 HTML/CSS 單檔形式建構。**框架啟發自六角學院創辦人廖洧杰的 Vibe Coding 資源。**</div>
   </div>
 </footer>
 </div> 
-</body> 
+<script>
+  // Projects 篩選功能：確保只有被選中的類別會顯示
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterContainer = document.querySelector('.project-filters');
+    const projectCards = document.querySelectorAll('.project-card');
+    const filterButtons = document.querySelectorAll('.filter-btn');
 
+    if (filterContainer) {
+      filterContainer.addEventListener('click', (e) => {
+        const target = e.target;
+
+        // 確認點擊的是篩選按鈕
+        if (target.classList.contains('filter-btn')) {
+          const filterValue = target.getAttribute('data-filter');
+
+          // 1. 移除所有按鈕的 active 狀態並設定新的 active 狀態
+          filterButtons.forEach(btn => {
+            btn.classList.remove('is-active');
+            btn.setAttribute('aria-selected', 'false');
+          });
+          target.classList.add('is-active');
+          target.setAttribute('aria-selected', 'true');
+
+          // 2. 顯示/隱藏卡片
+          projectCards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            
+            if (filterValue === 'all' || cardCategory === filterValue) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        }
+      });
+    }
+  });
+</script>
+</body>
 </html>
